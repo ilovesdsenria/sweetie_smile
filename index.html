@@ -69,7 +69,7 @@
         const hashedPassword = CryptoJS.SHA256(password).toString();
 
         // Known hashes for comparison
-        const correctHashedUsername = CryptoJS.SHA256('1').toString();
+        const correctHashedUsername = CryptoJS.SHA256('dsenria').toString();
         // мамин хацкер, начнем с того, что ты попал сюда случайно.
         // Вход по паролю добавлен чисто от левых людей.
         // Так как сайт лежит на githubpages, то бэка не существует. Поэтому,как ты видишь, проверка пароля осуществляется  в самом хтмл.
@@ -78,11 +78,11 @@
         //И посмотри, что предназначалось не тебе
         //Но минус карму ты уже заработал
 
-        const correctHashedPassword = CryptoJS.SHA256('1').toString(); // Hash for '1'
+        const correctHashedPassword = CryptoJS.SHA256('uarethebest!').toString();
 
         // Check the hashed username and password
         if (hashedUsername === correctHashedUsername && hashedPassword === correctHashedPassword) {
-            window.location.href = 'welcome.html'; // Redirect to the protected page
+            window.location.href = 'second.html';
         } else {
             errorMessage.textContent = 'Incorrect username or password.';
         }

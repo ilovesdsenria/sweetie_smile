@@ -4,45 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cheer Up!</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lobster&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif; /* Use Google Font */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-image: url('path/to/your-background-image.jpg'); /* Add your background image URL here */
+            background-image: url('imagies/background.jpg'); /* Keep your background image URL here */
             background-size: cover; /* Cover the entire viewport */
             background-position: center; /* Center the image */
             color: white; /* Change text color for better visibility */
             text-align: center;
         }
         h1 {
-            color: #ffeb3b; /* Yellow text for contrast against dark backgrounds */
+            font-family: 'Lobster', cursive; /* Fancy font for the heading */
         }
         .giphy-container {
             margin: 20px 0;
         }
         .quote {
-            font-size: 18px;
+            font-size: 20px; /* Slightly larger font size */
             font-style: italic;
-            color: #ffeb3b; /* Yellow text for contrast */
             margin: 20px 0;
         }
         button {
             padding: 10px 20px;
             margin-top: 10px;
-            background-color: #4CAF50; /* Green button */
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: transform 0.2s; /* Scale effect */
+            font-size: 18px; /* Increase font size */
+            font-weight: bold; /* Bold text */
         }
         button:hover {
             transform: scale(1.05); /* Scale effect on hover */
+        }
+        /* Styles for compliment button */
+        .compliment-button {
+            background-color: #FF69B4; /* Hot pink */
+            color: white; /* Text color */
+        }
+        /* Styles for music buttons */
+        .music-button {
+            background-color: #1E90FF; /* Dodger blue */
+            color: white; /* Text color */
         }
         select {
             padding: 10px;
@@ -50,32 +61,67 @@
             border-radius: 5px;
             border: none;
         }
+        .compliment-display {
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+            border: 1px solid #FFF; /* White border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* Padding around text */
+            margin-top: 10px; /* Space above the display */
+            color: white; /* Text color */
+            font-size: 20px; /* Font size */
+            display: none; /* Initially hidden */
+        }
+        .back-button {
+            padding: 10px 20px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px; /* Adjust to your preference */
+            background-color: #FF69B4; /* Red background for visibility */
+            color: white;
+            border: none;
+            border-radius: 5px; /* Rounded corners */
+            cursor: pointer;
+            transition: transform 0.2s; /* Scale effect */
+        }
+        .back-button:hover {
+            transform: scale(1.1); /* Scale effect on hover */
+        }
     </style>
 </head>
 <body>
-<h1>I'm here for you!</h1>
+<h1>Может это чем-то поможет?....</h1>
 <div class="giphy-container">
-    <img src="https://media.giphy.com/media/3o7TKX9IQ5g06Z70g8/giphy.gif" alt="Cheerful GIF" width="300">
+    <img src="https://media.giphy.com/media/0OgdJVNjbcIifqSb7U/giphy.gif" alt="Back" style="width: 200px; height: 200px;">
 </div>
 <div class="quote" id="quoteContainer"></div>
 
-<button onclick="showRandomCompliment()">Give me a compliment!</button>
-<button onclick="toggleMusic()">Play/Pause Music</button>
+<button onclick="showRandomCompliment()" class="compliment-button">Нажми несколько раз</button>
+<div class="compliment-display" id="complimentDisplay"></div>
 
-<label for="songSelect">Choose a song:</label>
+<label for="songSelect">Песенки</label>
 <select id="songSelect">
-    <option value="">Select a song</option>
-    <option value="song1.mp3">Song 1</option>
-    <option value="song2.mp3">Song 2</option>
-    <option value="song3.mp3">Song 3</option>
-    <!-- Add more options as needed -->
+    <option value="">Выбор</option>
+    <option value="music/lana.mp3">Вроде твоя любимая песня Ланы</option>
+    <option value="music/andrei.mp3">Андрей, звёзды</option>
+    <option value="music/billie.mp3">База</option>
+    <option value="music/temprorary.mp3">Может зайдёт?</option>
 </select>
-<button onclick="playSelectedSong()">Play Selected Song</button>
+<button onclick="playSelectedSong()" class="music-button">Play Selected Song</button>
+<button onclick="stopMusic()" class="music-button">Stop Music</button>
 
-<audio id="backgroundMusic" src="path/to/your-background-music.mp3" loop></audio>
+<!-- Play background music by default -->
 <audio id="selectedSong" loop></audio>
-
+<button class="back-button" onclick="goBack()" alt="Back">Back</button>
 <script>
+    let compliments = [];
+
+    // Fetch compliments from JSON file
+    fetch('compliments.json')
+        .then(response => response.json())
+        .then(data => {
+            compliments = data.compliments;
+        });
+
     const quotes = [
         "You are stronger than you think!",
         "Every day may not be good, but there is something good in every day.",
@@ -84,49 +130,20 @@
         "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart."
     ];
 
-    const compliments = [
-        "You have a great sense of humor!",
-        "Your smile brightens up the room.",
-        "You are incredibly thoughtful.",
-        "You light up the lives of everyone around you.",
-        "You are a wonderful friend.",
-        "You have a beautiful heart.",
-        "You make the world a better place.",
-        "Your kindness is contagious.",
-        "You have an amazing ability to make people feel special.",
-        "You are a true inspiration to others.",
-        "You are so talented!",
-        "Your positivity is infectious.",
-        "You have a unique perspective that is so refreshing.",
-        "You are a ray of sunshine on a cloudy day.",
-        "You have a wonderful taste in music.",
-        "You are always there for others when they need you.",
-        "Your creativity knows no bounds.",
-        "You are loved more than you know.",
-        "You have a heart of gold.",
-        "You are capable of achieving anything you set your mind to.",
-        "You bring out the best in people."
-        // Add more compliments to reach 101
-    ];
-
     // Display a random quote
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     document.getElementById('quoteContainer').textContent = randomQuote;
 
     function showRandomCompliment() {
-        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
-        alert(randomCompliment); // Show compliment in an alert
-    }
-
-    function toggleMusic() {
-        const music = document.getElementById('backgroundMusic');
-        if (music.paused) {
-            music.play();
-            this.textContent = "Pause Music"; // Change button text to indicate play status
-        } else {
-            music.pause();
-            this.textContent = "Play Music"; // Change button text to indicate play status
+        if (compliments.length === 0) {
+            document.getElementById('complimentDisplay').textContent = "Compliments are loading, please try again!";
+            document.getElementById('complimentDisplay').style.display = "block"; // Show the message
+            return;
         }
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+        const complimentDisplay = document.getElementById('complimentDisplay');
+        complimentDisplay.textContent = randomCompliment; // Display compliment in div
+        complimentDisplay.style.display = "block"; // Show the compliment
     }
 
     function playSelectedSong() {
@@ -138,6 +155,15 @@
         } else {
             alert("Please select a song first!");
         }
+    }
+
+    function stopMusic() {
+        const music = document.getElementById('selectedSong');
+        music.pause(); // Pause the currently playing song
+        music.src = ''; // Reset the source to stop any sound
+    }
+    function goBack(){
+        window.location.href = 'second.html'
     }
 </script>
 </body>
