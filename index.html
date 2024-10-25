@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('imagies/login.webp'); /* Replace with your image URL */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Do not repeat the image */
+        }
+        .login-container {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Submit</button>
+    <div class="error" id="error-message"></div>
+</div>
+
+<script>
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMessage = document.getElementById('error-message');
+
+        // Hash the username and password
+        const hashedUsername = CryptoJS.SHA256(username).toString();
+        const hashedPassword = CryptoJS.SHA256(password).toString();
+
+        // Known hashes for comparison
+        const correctHashedUsername = CryptoJS.SHA256('1').toString();
+        // мамин хацкер, начнем с того, что ты попал сюда случайно.
+        // Вход по паролю добавлен чисто от левых людей.
+        // Так как сайт лежит на githubpages, то бэка не существует. Поэтому,как ты видишь, проверка пароля осуществляется  в самом хтмл.
+        //Если ты адекватный, то покинь сайт, пожалуйста.
+        //Ну или расшифрую очень сложное шифрование(подсказка: название шифрования написано ниже)
+        //И посмотри, что предназначалось не тебе
+        //Но минус карму ты уже заработал
+
+        const correctHashedPassword = CryptoJS.SHA256('1').toString(); // Hash for '1'
+
+        // Check the hashed username and password
+        if (hashedUsername === correctHashedUsername && hashedPassword === correctHashedPassword) {
+            window.location.href = 'welcome.html'; // Redirect to the protected page
+        } else {
+            errorMessage.textContent = 'Incorrect username or password.';
+        }
+    }
+</script>
+</body>
+</html>

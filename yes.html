@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cheer Up!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-image: url('path/to/your-background-image.jpg'); /* Add your background image URL here */
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the image */
+            color: white; /* Change text color for better visibility */
+            text-align: center;
+        }
+        h1 {
+            color: #ffeb3b; /* Yellow text for contrast against dark backgrounds */
+        }
+        .giphy-container {
+            margin: 20px 0;
+        }
+        .quote {
+            font-size: 18px;
+            font-style: italic;
+            color: #ffeb3b; /* Yellow text for contrast */
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s; /* Scale effect */
+        }
+        button:hover {
+            transform: scale(1.05); /* Scale effect on hover */
+        }
+        select {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<h1>I'm here for you!</h1>
+<div class="giphy-container">
+    <img src="https://media.giphy.com/media/3o7TKX9IQ5g06Z70g8/giphy.gif" alt="Cheerful GIF" width="300">
+</div>
+<div class="quote" id="quoteContainer"></div>
+
+<button onclick="showRandomCompliment()">Give me a compliment!</button>
+<button onclick="toggleMusic()">Play/Pause Music</button>
+
+<label for="songSelect">Choose a song:</label>
+<select id="songSelect">
+    <option value="">Select a song</option>
+    <option value="song1.mp3">Song 1</option>
+    <option value="song2.mp3">Song 2</option>
+    <option value="song3.mp3">Song 3</option>
+    <!-- Add more options as needed -->
+</select>
+<button onclick="playSelectedSong()">Play Selected Song</button>
+
+<audio id="backgroundMusic" src="path/to/your-background-music.mp3" loop></audio>
+<audio id="selectedSong" loop></audio>
+
+<script>
+    const quotes = [
+        "You are stronger than you think!",
+        "Every day may not be good, but there is something good in every day.",
+        "Keep your face always toward the sunshine—and shadows will fall behind you.",
+        "You are enough just as you are.",
+        "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart."
+    ];
+
+    const compliments = [
+        "You have a great sense of humor!",
+        "Your smile brightens up the room.",
+        "You are incredibly thoughtful.",
+        "You light up the lives of everyone around you.",
+        "You are a wonderful friend.",
+        "You have a beautiful heart.",
+        "You make the world a better place.",
+        "Your kindness is contagious.",
+        "You have an amazing ability to make people feel special.",
+        "You are a true inspiration to others.",
+        "You are so talented!",
+        "Your positivity is infectious.",
+        "You have a unique perspective that is so refreshing.",
+        "You are a ray of sunshine on a cloudy day.",
+        "You have a wonderful taste in music.",
+        "You are always there for others when they need you.",
+        "Your creativity knows no bounds.",
+        "You are loved more than you know.",
+        "You have a heart of gold.",
+        "You are capable of achieving anything you set your mind to.",
+        "You bring out the best in people."
+        // Add more compliments to reach 101
+    ];
+
+    // Display a random quote
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('quoteContainer').textContent = randomQuote;
+
+    function showRandomCompliment() {
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+        alert(randomCompliment); // Show compliment in an alert
+    }
+
+    function toggleMusic() {
+        const music = document.getElementById('backgroundMusic');
+        if (music.paused) {
+            music.play();
+            this.textContent = "Pause Music"; // Change button text to indicate play status
+        } else {
+            music.pause();
+            this.textContent = "Play Music"; // Change button text to indicate play status
+        }
+    }
+
+    function playSelectedSong() {
+        const selectedSong = document.getElementById('songSelect').value;
+        const music = document.getElementById('selectedSong');
+        if (selectedSong) {
+            music.src = selectedSong; // Set the source to the selected song
+            music.play();
+        } else {
+            alert("Please select a song first!");
+        }
+    }
+</script>
+</body>
+</html>
