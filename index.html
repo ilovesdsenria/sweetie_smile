@@ -3,89 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <title>Cheer Up!</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lobster&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
             margin: 0;
-            background-image: url('imagies/login.webp'); /* Replace with your image URL */
-            background-size: cover; /* Cover the entire background */
-            background-position: center; /* Center the image */
-            background-repeat: no-repeat; /* Do not repeat the image */
-        }
-        .login-container {
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            width: 300px;
+            background-image: url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
             text-align: center;
         }
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+        h1 {
+            font-family: 'Lobster', cursive;
+        }
+        .giphy-container {
+            margin: 20px 0;
+        }
+        .quote {
+            font-size: 20px;
+            font-style: italic;
+            margin: 20px 0;
         }
         button {
-            padding: 10px;
-            width: 100%;
-            border: none;
-            border-radius: 4px;
-            background-color: #4CAF50;
-            color: white;
-            font-size: 16px;
-        }
-        .error {
-            color: red;
+            padding: 10px 20px;
             margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        button:hover {
+            transform: scale(1.05);
+        }
+        .compliment-button {
+            background-color: #FF69B4;
+            color: white;
+        }
+        .music-button {
+            background-color: #1E90FF;
+            color: white;
+        }
+        .gallery-button {
+            background-color: #32CD32; /* Зелёный цвет для кнопки галереи */
+            color: white;
+        }
+        select {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        .compliment-display, .fact-display {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid #FFF;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            color: white;
+            font-size: 20px;
+            display: none;
+        }
+        .back-button {
+            padding: 10px 20px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+
+        /* Media Queries for mobile responsiveness */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px; /* Smaller heading */
+            }
+            button, select {
+                font-size: 16px; /* Smaller button and select size */
+                padding: 8px 16px; /* Smaller padding */
+            }
+            .quote, .compliment-display, .fact-display {
+                font-size: 16px; /* Smaller text for quotes and compliments */
+            }
         }
     </style>
 </head>
 <body>
-<div class="login-container">
-    <h2>Login</h2>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button onclick="login()">Submit</button>
-    <div class="error" id="error-message"></div>
+<h1>Heyyy sweetie!!</h1>
+<div class="giphy-container">
+    <img src="https://media.giphy.com/media/0OgdJVNjbcIifqSb7U/giphy.gif" alt="Back" style="width: 200px; height: 200px;">
 </div>
+<div class="quote" id="quoteContainer"></div>
+
+<button onclick="showRandomCompliment()" class="compliment-button">Нажми несколько раз</button>
+<div class="compliment-display" id="complimentDisplay"></div>
+
+<label for="songSelect">Песенки</label>
+<select id="songSelect">
+    <option value="">Выбор</option>
+    <option value="music/lana.mp3">Вроде твоя любимая песня Ланы</option>
+    <option value="music/andrei.mp3">Андрей, звёзды</option>
+    <option value="music/billie.mp3">База</option>
+    <option value="music/temprorary.mp3">Может зайдёт?</option>
+</select>
+<button onclick="playSelectedSong()" class="music-button">Play Selected Song</button>
+<button onclick="stopMusic()" class="music-button">Stop Music</button>
+
+<!-- Play background music by default -->
+<audio id="selectedSong" loop></audio>
+
+<!-- Button to show random fun fact -->
+<button onclick="showRandomFact()" class="compliment-button">Покажи забавный факт</button>
+<div class="fact-display" id="factDisplay"></div>
+
+<!-- Button to go to gallery page -->
+<button class="gallery-button" onclick="goToGallery()">Перейти в галерею</button>
+
 
 <script>
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const errorMessage = document.getElementById('error-message');
+    let compliments = [];
+    let facts = [
+        "Did you know honey never spoils? Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3000 years old and still perfectly edible!",
+        "Bananas are berries, but strawberries aren't!",
+        "Wombat poop is cube-shaped!",
+        "Octopuses have three hearts!",
+        "A day on Venus is longer than a year on Venus!"
+    ];
 
-        // Hash the username and password
-        const hashedUsername = CryptoJS.SHA256(username).toString();
-        const hashedPassword = CryptoJS.SHA256(password).toString();
+    // Fetch compliments from JSON file
+    fetch('compliments.json')
+        .then(response => response.json())
+        .then(data => {
+            compliments = data.compliments;
+        });
 
-        // Known hashes for comparison
-        const correctHashedUsername = CryptoJS.SHA256('dsenria').toString();
-        // мамин хацкер, начнем с того, что ты попал сюда случайно.
-        // Вход по паролю добавлен чисто от левых людей.
-        // Так как сайт лежит на githubpages, то бэка не существует. Поэтому,как ты видишь, проверка пароля осуществляется  в самом хтмл.
-        //Если ты адекватный, то покинь сайт, пожалуйста.
-        //Ну или расшифрую очень сложное шифрование(подсказка: название шифрования написано ниже)
-        //И посмотри, что предназначалось не тебе
-        //Но минус карму ты уже заработал
+    const quotes = [
+        "You are stronger than you think!",
+        "Every day may not be good, but there is something good in every day.",
+        "Keep your face always toward the sunshine—and shadows will fall behind you.",
+        "You are enough just as you are.",
+        "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart."
+    ];
 
-        const correctHashedPassword = CryptoJS.SHA256('uarethebest!').toString();
+    // Display a random quote
+    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+    document.getElementById('quoteContainer').textContent = randomQuote;
 
-        // Check the hashed username and password
-        if (hashedUsername === correctHashedUsername && hashedPassword === correctHashedPassword) {
-            window.location.href = 'second.html';
-        } else {
-            errorMessage.textContent = 'Incorrect username or password.';
+    function showRandomCompliment() {
+        if (compliments.length === 0) {
+            document.getElementById('complimentDisplay').textContent = "Compliments are loading, please try again!";
+            document.getElementById('complimentDisplay').style.display = "block"; // Show the message
+            return;
         }
+        const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
+        const complimentDisplay = document.getElementById('complimentDisplay');
+        complimentDisplay.textContent = randomCompliment; // Display compliment in div
+        complimentDisplay.style.display = "block"; // Show the compliment
+    }
+
+    function playSelectedSong() {
+        const selectedSong = document.getElementById('songSelect').value;
+        const music = document.getElementById('selectedSong');
+        if (selectedSong) {
+            music.src = selectedSong; // Set the source to the selected song
+            music.play();
+        } else {
+            alert("Please select a song first!");
+        }
+    }
+
+    function stopMusic() {
+        const music = document.getElementById('selectedSong');
+        music.pause(); // Pause the currently playing song
+        music.src = ''; // Reset the source to stop any sound
+    }
+
+    function showRandomFact() {
+        const randomFact = facts[Math.floor(Math.random() * facts.length)];
+        const factDisplay = document.getElementById('factDisplay');
+        factDisplay.textContent = randomFact; // Display fact in div
+        factDisplay.style.display = "block"; // Show the fact
+    }
+
+    function goBack() {
+        window.location.href = 'second.html';
+    }
+
+    function goToGallery() {
+        window.location.href = 'gallery.html'; // Замените на нужный путь к галерее
     }
 </script>
 </body>
