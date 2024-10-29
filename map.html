@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Наши Воспоминания</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    /* Стили для карты и кнопки */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      position: relative; /* Устанавливаем позиционирование для кнопки */
+    }
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
+    .back-button {
+      position: absolute; /* Позиционирование кнопки */
+      bottom: 20px; /* Отступ от нижней части */
+      left: 20px; /* Отступ от левой части */
+      z-index: 1000;
+      background-color: rgba(255, 255, 255, 0.9); /* Полупрозрачный фон */
+      padding: 12px 20px;
+      border-radius: 8px; /* Закругленные углы */
+      color: #228B22;
+      text-decoration: none;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень для кнопки */
+      transition: background-color 0.3s, transform 0.3s; /* Анимация при наведении */
+    }
+    .back-button:hover {
+      background-color: rgba(240, 240, 240, 1); /* Изменение фона при наведении */
+      transform: scale(1.05); /* Увеличение при наведении */
+    }
+    @media (max-width: 600px) {
+      .back-button {
+        padding: 10px 15px; /* Меньше отступов на мобильных устройствах */
+        font-size: 14px; /* Уменьшение размера шрифта */
+      }
+    }
+    .leaflet-control-attribution {
+      display: none; /* Скрыть атрибуцию карты */
+    }
+  </style>
+</head>
+
+<body>
+<!-- Кнопка "Назад" -->
+<a href="../index.html" class="back-button">Назад</a>
+
+<!-- Контейнер для карты -->
+<div id="map"></div>
+
+<!-- Подключение библиотек Leaflet и jQuery -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  // Инициализация карты
+  var map = L.map('map').setView([55.7558, 37.6176], 12);
+
+  // Базовый слой карты
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: ''
+  }).addTo(map);
+
+  // Загрузка данных из JSON и добавление маркеров на карту
+  $.getJSON("locations.json", function (data) {
+    L.geoJSON(data, {
+      pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, {
+          radius: 8,
+          fillColor: "#228B22",
+          color: "#ffffff",
+          weight: 2,
+          fillOpacity: 0.8
+        });
+      },
+      onEachFeature: function (feature, layer) {
+        if (feature.properties && feature.properties.name) {
+          layer.bindPopup(
+                  `<h3>${feature.properties.name}</h3>
+             <p>${feature.properties.description}</p>
+             <img src="${feature.properties.image}" alt="${feature.properties.name}" style="max-width: 100%; height: auto;" />`
+          );
+        }
+        layer.addTo(map);
+      }
+    }).addTo(map);
+  });
+</script>
+</body>
+</html>

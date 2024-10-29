@@ -54,7 +54,7 @@
             color: white;
         }
         .gallery-button {
-            background-color: #32CD32; /* Зелёный цвет для кнопки галереи */
+            background-color: #32CD32;
             color: white;
         }
         select {
@@ -73,33 +73,17 @@
             font-size: 20px;
             display: none;
         }
-        .back-button {
-            padding: 10px 20px;
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #FF69B4;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .back-button:hover {
-            transform: scale(1.1);
-        }
 
-        /* Media Queries for mobile responsiveness */
         @media (max-width: 600px) {
             h1 {
-                font-size: 24px; /* Smaller heading */
+                font-size: 24px;
             }
             button, select {
-                font-size: 16px; /* Smaller button and select size */
-                padding: 8px 16px; /* Smaller padding */
+                font-size: 16px;
+                padding: 8px 16px;
             }
             .quote, .compliment-display, .fact-display {
-                font-size: 16px; /* Smaller text for quotes and compliments */
+                font-size: 16px;
             }
         }
     </style>
@@ -133,8 +117,8 @@
 <div class="fact-display" id="factDisplay"></div>
 
 <!-- Button to go to gallery page -->
-<button class="gallery-button" onclick="goToGallery()">Перейти в галерею</button>
-
+<button class="gallery-button" onclick="goToGallery()">Memories</button>
+<button class="gallery-button" onclick="goToMap()">Map</button>
 
 <script>
     let compliments = [];
@@ -146,7 +130,6 @@
         "A day on Venus is longer than a year on Venus!"
     ];
 
-    // Fetch compliments from JSON file
     fetch('compliments.json')
         .then(response => response.json())
         .then(data => {
@@ -161,27 +144,26 @@
         "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart."
     ];
 
-    // Display a random quote
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     document.getElementById('quoteContainer').textContent = randomQuote;
 
     function showRandomCompliment() {
         if (compliments.length === 0) {
             document.getElementById('complimentDisplay').textContent = "Compliments are loading, please try again!";
-            document.getElementById('complimentDisplay').style.display = "block"; // Show the message
+            document.getElementById('complimentDisplay').style.display = "block";
             return;
         }
         const randomCompliment = compliments[Math.floor(Math.random() * compliments.length)];
         const complimentDisplay = document.getElementById('complimentDisplay');
-        complimentDisplay.textContent = randomCompliment; // Display compliment in div
-        complimentDisplay.style.display = "block"; // Show the compliment
+        complimentDisplay.textContent = randomCompliment;
+        complimentDisplay.style.display = "block";
     }
 
     function playSelectedSong() {
         const selectedSong = document.getElementById('songSelect').value;
         const music = document.getElementById('selectedSong');
         if (selectedSong) {
-            music.src = selectedSong; // Set the source to the selected song
+            music.src = selectedSong;
             music.play();
         } else {
             alert("Please select a song first!");
@@ -190,15 +172,15 @@
 
     function stopMusic() {
         const music = document.getElementById('selectedSong');
-        music.pause(); // Pause the currently playing song
-        music.src = ''; // Reset the source to stop any sound
+        music.pause();
+        music.src = '';
     }
 
     function showRandomFact() {
         const randomFact = facts[Math.floor(Math.random() * facts.length)];
         const factDisplay = document.getElementById('factDisplay');
-        factDisplay.textContent = randomFact; // Display fact in div
-        factDisplay.style.display = "block"; // Show the fact
+        factDisplay.textContent = randomFact;
+        factDisplay.style.display = "block";
     }
 
     function goBack() {
@@ -206,7 +188,10 @@
     }
 
     function goToGallery() {
-        window.location.href = 'gallery.html'; // Замените на нужный путь к галерее
+        window.location.href = 'gallery.html';
+    }
+    function goToMap() {
+        window.location.href = 'map.html';
     }
 </script>
 </body>

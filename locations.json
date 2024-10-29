@@ -1,0 +1,64 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Квест на Белорусской",
+        "description": "14.09.2024"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.577221, 55.776793]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Маяковская",
+        "description": "Прогулка от Кузнецкого Моста до Марьиной Рощи, а потом до Маяковской 2.10.2024. Нашагали 5 км",
+        "image": "photos/3.jpeg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.596680, 55.769990]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Твой день рождения",
+        "description": "Джазовый концерт 24.08.2024",
+        "image": "photos/8.jpeg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.609060, 55.759495]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Артек",
+        "description": "Ну база. Место встречи",
+        "image": "photos/15.jpeg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [34.301291, 44.553791]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Концерт",
+        "description": "Концерт 06.09.2024, билеты на который случайно купили летом",
+        "image": "photos/14.jpeg"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [37.644923, 55.701981]
+      }
+    }
+  ]
+}
