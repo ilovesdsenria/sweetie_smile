@@ -50,7 +50,8 @@
 
 <body>
 <!-- Кнопка "Назад" -->
-<a href="index.html" class="back-button">Назад</a>
+<!-- Кнопка "Назад" -->
+<a href="#" class="back-button" onclick="goBack()">Назад</a>
 
 <!-- Контейнер для карты -->
 <div id="map"></div>
@@ -92,6 +93,9 @@
       }
     }).addTo(map);
   });
+  function goBack() {
+    window.location.href='index.html';
+  }
 </script>
 </body>
 </html>
